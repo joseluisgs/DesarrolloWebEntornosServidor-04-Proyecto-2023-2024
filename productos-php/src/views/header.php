@@ -1,3 +1,11 @@
+<?php
+
+use controllers\SessionController;
+
+require_once __DIR__ . '/../controllers/SessionController.php';
+$session = SessionController::getInstance();
+?>
+
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="/">
@@ -11,13 +19,21 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="logout.php">Logout</a>
+                    <a class="nav-link"
+                    <?php
+                    if ($session->isLoggedIn()) {
+                        echo 'href="/views/logout.php">Logout';
+                    } else {
+                        echo 'href="/views/login.php">Login';
+                    }
+                    ?>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="../index.php">Productos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="create.php">Nuevo Producto</a>
+                    <a class="nav-link" href="/views/create.php">Nuevo Producto</a>
                 </li>
                 <!-- Otras opciones de menú -->
             </ul>

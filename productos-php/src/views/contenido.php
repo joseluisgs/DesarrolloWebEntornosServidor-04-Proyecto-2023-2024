@@ -7,6 +7,8 @@ require_once __DIR__ . '/../controllers/SessionController.php';
 
 $session = SessionController::getInstance();
 
+echo "<h1>{$session->getWelcomeMessage()}</h1>";
+
 // Comprobar si el usuario está logueado
 if ($session->isLoggedIn()) {
     echo "El usuario está logueado.";

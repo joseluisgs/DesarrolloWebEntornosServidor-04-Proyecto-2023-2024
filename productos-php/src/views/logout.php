@@ -1,2 +1,9 @@
 <?php
-echo "<h1>Logout</h1>";
+
+use controllers\SessionController;
+
+require_once __DIR__ . '/../controllers/SessionController.php';
+
+$session = SessionController::getInstance();
+$session->logout();
+header('Location: ../index.php');

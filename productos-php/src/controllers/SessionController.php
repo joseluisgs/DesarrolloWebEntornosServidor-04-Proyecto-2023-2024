@@ -35,6 +35,10 @@ class SessionController
             $_SESSION['isAdmin'] = false;
         }
 
+        if (!isset($_SESSION['username'])) {
+            $_SESSION['username'] = null;
+        }
+
         // contador de visitas solo si está logueado
         if ($_SESSION['loggedIn']) {
             $_SESSION['visits']++;
@@ -81,6 +85,11 @@ class SessionController
     public function getWelcomeMessage()
     {
         return "Listado de Productos";
+    }
+
+    public function getUsername()
+    {
+        return $_SESSION['username'];
     }
 
 
