@@ -3,6 +3,7 @@
 namespace services;
 
 
+use Exception;
 use models\User;
 use PDO;
 
@@ -17,7 +18,8 @@ class UserService
         $this->db = $db;
     }
 
-    public function authenticate($username, $password): bool
+
+    public function authenticate($username, $password): User
     {
         // Aquí iría la lógica para verificar el nombre de usuario y la contraseña
         // Por ejemplo, buscar en la base de datos y comparar la contraseña con Bcrypt
@@ -26,9 +28,10 @@ class UserService
         // Ejemplo de búsqueda de usuario y verificación de contraseña
         $user = $this->findUserByUsername($username);
         if ($user && password_verify($password, $user->password)) {
-            return true;
+            return $user;
         }
-        return false;
+        // lanza una excepción si no se encuentra el usuario o la contraseña no es válida
+        throw new Exception('Usuario o contraseña no válidos');
     }
 
     public function findUserByUsername($username)

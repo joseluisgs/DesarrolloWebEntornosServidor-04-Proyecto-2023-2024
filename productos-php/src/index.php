@@ -1,23 +1,13 @@
 <?php
 
+use services\SessionService;
+
 // Para cargar las clases automáticamente
 require_once 'vendor/autoload.php';
 
-// Para las sesiones
-use config\Config;
-use services\SessionService;
-use services\UserService;
-
+// Para las sesiones y configuración
 require_once __DIR__ . '/services/SessionService.php';
-require_once __DIR__ . '/config/Config.php';
-require_once __DIR__ . '/services/UserService.php';
-
-$session = SessionService::getInstance();
-
-
-$userService = new UserService(Config::getInstance()->db);
-echo $userService->authenticate('admin', 'Admin1');
-
+$session = $sessionService = SessionService::getInstance();
 
 ?>
 
@@ -40,23 +30,25 @@ echo $userService->authenticate('admin', 'Admin1');
     // Comprobar si el usuario está logueado
     if ($session->isLoggedIn()) {
         echo "El usuario está logueado.";
+        echo "<br>";
     } else {
         echo "El usuario no está logueado.";
+        echo "<br>";
     }
 
     // Comprobar si el usuario es administrador
     if ($session->isAdmin()) {
         echo "El usuario es administrador.";
+        echo "<br>";
     } else {
         echo "El usuario no es administrador.";
+        echo "<br>";
     }
 
     // Obtener el número de visitas
     $visitCount = $session->getVisitCount();
     echo "Número de visitas: " . $visitCount;
-
-    // Borrar la sesión
-    $session->clear();
+    echo "<br>";
     ?>
 
 </div>

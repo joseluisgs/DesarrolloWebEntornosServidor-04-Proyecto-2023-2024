@@ -6,9 +6,10 @@ namespace config;
 use Dotenv\Dotenv;
 use PDO;
 
+
 class Config
 {
-    private static $instance = null;
+    private static $instance;
     private $postgresDb;
     private $postgresUser;
     private $postgresPassword;
@@ -16,9 +17,12 @@ class Config
     private $postgresPort;
     private $db;
 
+    private $rootPath = '/var/www/html/public/';
+
     private function __construct()
     {
-        $dotenv = Dotenv::createImmutable(__DIR__, '../.env');
+
+        $dotenv = Dotenv::createImmutable($this->rootPath);
         $dotenv->load();
 
         // Cargar las variables de entorno y almacenarlas en las propiedades.
@@ -32,11 +36,12 @@ class Config
 
     public static function getInstance(): Config
     {
-        if (self::$instance === null) {
+        if (!isset(self::$instance)) {
             self::$instance = new Config();
         }
         return self::$instance;
     }
+
 
     // Magic methos for get and set
     public function __get($name)

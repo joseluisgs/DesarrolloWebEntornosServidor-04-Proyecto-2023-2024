@@ -1,3 +1,51 @@
+<?php
+
+
+use config\Config;
+use services\SessionService;
+use services\UserService;
+
+
+require_once 'vendor/autoload.php';
+
+require_once __DIR__ . '/services/SessionService.php';
+require_once __DIR__ . '/services/UserService.php';
+require_once __DIR__ . '/config/Config.php';
+
+$session = SessionService::getInstance();
+$config = Config::getInstance();
+
+$error = '';
+$usersService = new UserService($config->db);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validar y limpiar la entrada
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+
+    // Verificar que la entrada no esté vacía después de la limpieza
+    if (!$username || !$password) {
+        $error = 'Usuario/a o contraseña inválidos.';
+    } else {
+        try {
+            $user = $usersService->authenticate($username, $password);
+            if ($user) {
+                $isAdmin = in_array('ADMIN', $user->roles);
+                $session->login($user->username, $isAdmin);
+                header('Location: index.php');
+                exit;
+            } else {
+                // Si la autenticación falla, establecer un mensaje de error genérico
+                $error = 'Usuario/a o contraseña inválidos.';
+            }
+        } catch (Exception $e) {
+            // Manejar la excepción sin revelar detalles sensibles
+            $error = 'Error en el sistema. Por favor intente más tarde.';
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +58,7 @@
 <body>
 <div class="container" style="width: 50%; margin-left: auto; margin-right: auto;">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="login.php">
+        <a class="navbar-brand" href="/">
             <img alt="Logo" class="d-inline-block align-text-top" height="30" src="/images/favicon.png" width="30">
             Mis productos CRUD 2º DAW
         </a>
@@ -23,9 +71,9 @@
             <label for="password">Password:</label>
             <input class="form-control" id="password" name="password" required type="password">
         </div>
-        <div th:if="${error}">
-            <p style="color: red;" th:text="${error}"></p>
-        </div>
+        <?php if ($error): ?>
+            <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
+        <?php endif; ?>
         <button class="btn btn-primary" type="submit">Login</button>
     </form>
 </div>

@@ -80,7 +80,7 @@ CREATE TABLE "public"."usuarios"
 ) WITH (oids = false);
 
 -- Contraseña: admin Admin1
--- Contraseña: user user1234
+-- Contraseña: user User1234
 -- Contraseña: test test1234
 
 

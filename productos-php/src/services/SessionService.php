@@ -9,13 +9,12 @@ namespace services;
  */
 class SessionService
 {
-    // Este es un ejemplo de patrón Singleton
+
     private static $instance;
 
     private function __construct()
     {
         if (session_status() == PHP_SESSION_NONE) {
-            // Si no hay sesión iniciada, la iniciamos
             session_start();
         }
         $this->initSession();
@@ -39,7 +38,6 @@ class SessionService
             $_SESSION['username'] = null;
         }
 
-        // contador de visitas solo si está logueado
         if ($_SESSION['loggedIn']) {
             $_SESSION['visits']++;
         }
@@ -47,8 +45,8 @@ class SessionService
 
     public static function getInstance(): SessionService
     {
-        if (!self::$instance) {
-            self::$instance = new self();
+        if (!isset(self::$instance)) {
+            self::$instance = new SessionService();
         }
         return self::$instance;
     }
@@ -73,6 +71,7 @@ class SessionService
         $_SESSION['loggedIn'] = true;
         $_SESSION['isAdmin'] = $isAdmin;
         $_SESSION['username'] = $username;
+        $_SESSION['visits'] = 0;
     }
 
     public function logout()
@@ -80,6 +79,7 @@ class SessionService
         $_SESSION['loggedIn'] = false;
         $_SESSION['isAdmin'] = false;
         $_SESSION['username'] = null;
+        $_SESSION['visits'] = 0;
     }
 
     public function getWelcomeMessage()
@@ -91,7 +91,6 @@ class SessionService
     {
         return $_SESSION['username'];
     }
-
 
     public function clear()
     {
