@@ -1,3 +1,13 @@
+<?php
+
+// Para las sesiones
+use controllers\SessionController;
+
+require_once __DIR__ . '/controllers/SessionController.php';
+
+$session = SessionController::getInstance();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,13 +20,14 @@
 <body>
 <div class="container">
     <?php
-    require_once 'header.php';
+    require_once 'views/header.php';
+    require_once 'views/contenido.php';
     ?>
 
 </div>
 
 <?php
-require_once 'footer.php';
+require_once 'views/footer.php';
 ?>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"

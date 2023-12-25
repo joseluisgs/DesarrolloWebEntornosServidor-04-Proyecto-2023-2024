@@ -14,7 +14,7 @@
                     <a class="nav-link" href="logout.php">Logout</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php">Productos</a>
+                    <a class="nav-link" href="../index.php">Productos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="create.php">Nuevo Producto</a>
