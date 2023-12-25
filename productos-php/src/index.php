@@ -1,11 +1,11 @@
 <?php
 
 // Para las sesiones
-use controllers\SessionController;
+use services\SessionService;
 
-require_once __DIR__ . '/controllers/SessionController.php';
+require_once __DIR__ . '/services/SessionService.php';
 
-$session = SessionController::getInstance();
+$session = SessionService::getInstance();
 ?>
 
 <!DOCTYPE html>
@@ -19,15 +19,37 @@ $session = SessionController::getInstance();
 </head>
 <body>
 <div class="container">
+    <?php require_once 'header.php'; ?>
+
     <?php
-    require_once 'views/header.php';
-    require_once 'views/contenido.php';
+    echo "<h1>{$session->getWelcomeMessage()}</h1>";
+
+    // Comprobar si el usuario está logueado
+    if ($session->isLoggedIn()) {
+        echo "El usuario está logueado.";
+    } else {
+        echo "El usuario no está logueado.";
+    }
+
+    // Comprobar si el usuario es administrador
+    if ($session->isAdmin()) {
+        echo "El usuario es administrador.";
+    } else {
+        echo "El usuario no es administrador.";
+    }
+
+    // Obtener el número de visitas
+    $visitCount = $session->getVisitCount();
+    echo "Número de visitas: " . $visitCount;
+
+    // Borrar la sesión
+    $session->clear();
     ?>
 
 </div>
 
 <?php
-require_once 'views/footer.php';
+require_once 'footer.php';
 ?>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"

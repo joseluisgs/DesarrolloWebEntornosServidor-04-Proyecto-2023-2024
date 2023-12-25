@@ -1,15 +1,15 @@
 <?php
 
-namespace controllers;
+namespace services;
 
 /**
- * Class SessionController
- * @package controllers
+ * Class SessionService
+ * @package services
  * Esta clase se encarga de gestionar la sesión de usuario
  */
-class SessionController
+class SessionService
 {
-
+    // Este es un ejemplo de patrón Singleton
     private static $instance;
 
     private function __construct()
