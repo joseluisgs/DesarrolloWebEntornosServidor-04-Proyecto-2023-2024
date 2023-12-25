@@ -12,6 +12,8 @@ services:
       - ./src:/var/www/html/public # Usar el directorio ficheros de la aplicación web
       - ./uploads:/var/www/html/public/uploads  # Usar el volumen nombrado
       - ./:/home/app # Usar el directorio local para el código fuente de la aplicación y proyecto
+      - ./vendor:/var/www/html/public/vendor # Montar el directorio vendor de Composer
+      - ./.env:/var/www/html/public/.env # Montar el archivo .env específico
     depends_on:
       - postgres-db
     # restart: always

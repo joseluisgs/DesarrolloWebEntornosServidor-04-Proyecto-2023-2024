@@ -45,7 +45,7 @@ class SessionService
         }
     }
 
-    public static function getInstance()
+    public static function getInstance(): SessionService
     {
         if (!self::$instance) {
             self::$instance = new self();

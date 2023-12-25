@@ -1,11 +1,27 @@
 <?php
 
 // Para las sesiones
+use config\Config;
 use services\SessionService;
 
 require_once __DIR__ . '/services/SessionService.php';
 
 $session = SessionService::getInstance();
+
+// Para las configuraciones
+
+
+require_once __DIR__ . '/config/Config.php';
+
+$config = Config::getInstance();
+
+echo $config->getPostgresDb();
+echo $config->getPostgresUser();
+echo $config->getPostgresPassword();
+echo $config->getPostgresHost();
+echo $config->getPostgresPort();
+
+
 ?>
 
 <!DOCTYPE html>
