@@ -18,6 +18,7 @@ class Config
     private $db;
 
     private $rootPath = '/var/www/html/public/';
+    private $uploadPath = '/var/www/html/public/uploads/';
 
     private function __construct()
     {

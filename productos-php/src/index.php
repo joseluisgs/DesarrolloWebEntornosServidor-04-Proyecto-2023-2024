@@ -51,6 +51,16 @@ $session = $sessionService = SessionService::getInstance();
     echo "<br>";
     ?>
 
+    <p class="mt-4 text-center" style="font-size: smaller;">
+        <span>Nº de visitas: <?php echo $session->getVisitCount(); ?></span>
+        <?php
+        if ($session->isLoggedIn()) {
+            echo "<span>, desde el último lgoin en: {$session->getLastLoginDate()}</span>";
+        }
+        ?>
+    </p>
+
+
 </div>
 
 <?php
