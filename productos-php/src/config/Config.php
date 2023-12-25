@@ -2,9 +2,9 @@
 
 namespace config;
 
-require_once 'vendor/autoload.php';
 
 use Dotenv\Dotenv;
+use PDO;
 
 class Config
 {
@@ -14,6 +14,7 @@ class Config
     private $postgresPassword;
     private $postgresHost;
     private $postgresPort;
+    private $db;
 
     private function __construct()
     {
@@ -21,11 +22,12 @@ class Config
         $dotenv->load();
 
         // Cargar las variables de entorno y almacenarlas en las propiedades.
-        $this->postgresDb = getenv('POSTGRES_DB');
-        $this->postgresUser = getenv('POSTGRES_USER');
-        $this->postgresPassword = getenv('POSTGRES_PASSWORD');
-        $this->postgresHost = getenv('POSTGRES_HOST');
-        $this->postgresPort = getenv('POSTGRES_PORT');
+        $this->postgresDb = getenv('POSTGRES_DB') ?? 'default_db';
+        $this->postgresUser = getenv('POSTGRES_USER') ?? 'default_user';
+        $this->postgresPassword = getenv('POSTGRES_PASSWORD') ?? 'default_password';
+        $this->postgresHost = getenv('POSTGRES_HOST') ?? 'localhost';
+        $this->postgresPort = getenv('POSTGRES_PORT') ?? '5432';
+        $this->db = new PDO("pgsql:host={$this->postgresHost};port={$this->postgresPort};dbname={$this->postgresDb}", $this->postgresUser, $this->postgresPassword);
     }
 
     public static function getInstance(): Config
@@ -36,29 +38,15 @@ class Config
         return self::$instance;
     }
 
-    // Métodos públicos para acceder a las propiedades.
-    public function getPostgresDb()
+    // Magic methos for get and set
+    public function __get($name)
     {
-        return $this->postgresDb;
+        return $this->$name;
     }
 
-    public function getPostgresUser()
+    public function __set($name, $value)
     {
-        return $this->postgresUser;
+        $this->$name = $value;
     }
 
-    public function getPostgresPassword()
-    {
-        return $this->postgresPassword;
-    }
-
-    public function getPostgresHost()
-    {
-        return $this->postgresHost;
-    }
-
-    public function getPostgresPort()
-    {
-        return $this->postgresPort;
-    }
 }

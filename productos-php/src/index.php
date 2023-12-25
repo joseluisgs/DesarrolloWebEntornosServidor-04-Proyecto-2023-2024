@@ -1,25 +1,22 @@
 <?php
 
+// Para cargar las clases automáticamente
+require_once 'vendor/autoload.php';
+
 // Para las sesiones
 use config\Config;
 use services\SessionService;
+use services\UserService;
 
 require_once __DIR__ . '/services/SessionService.php';
+require_once __DIR__ . '/config/Config.php';
+require_once __DIR__ . '/services/UserService.php';
 
 $session = SessionService::getInstance();
 
-// Para las configuraciones
 
-
-require_once __DIR__ . '/config/Config.php';
-
-$config = Config::getInstance();
-
-echo $config->getPostgresDb();
-echo $config->getPostgresUser();
-echo $config->getPostgresPassword();
-echo $config->getPostgresHost();
-echo $config->getPostgresPort();
+$userService = new UserService(Config::getInstance()->db);
+echo $userService->authenticate('admin', 'Admin1');
 
 
 ?>
