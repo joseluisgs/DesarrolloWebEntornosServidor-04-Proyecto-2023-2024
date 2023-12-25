@@ -1,6 +1,6 @@
 # DesarrolloWebEntornosServidor-04-Proyecto-2023-2024
 
-Desarrollo Web en Entornos Servidor - 04 Programación de servicios y apps web en PHP/Laravel Proyecto. 2DAW. Curso 2023-2024
+Desarrollo Web en Entornos Servidor - 04 Programación de servicios y apps web en PHP Proyecto. 2DAW. Curso 2023-2024
 
 - [DesarrolloWebEntornosServidor-03-Proyecto-2023-2024](#desarrollowebentornosservidor-03-proyecto-2023-2024)
 - [Proyecto](#proyecto)
