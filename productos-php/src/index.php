@@ -1,5 +1,8 @@
 <?php
 
+use config\Config;
+use services\CategoriasService;
+use services\ProductosService;
 use services\SessionService;
 
 // Para cargar las clases automáticamente
@@ -7,6 +10,11 @@ require_once 'vendor/autoload.php';
 
 // Para las sesiones y configuración
 require_once __DIR__ . '/services/SessionService.php';
+require_once __DIR__ . '/services/CategoriasService.php';
+require_once __DIR__ . '/config/Config.php';
+require_once __DIR__ . '/models/Categoria.php';
+require_once __DIR__ . '/services/ProductosService.php';
+require_once __DIR__ . '/models/Producto.php';
 $session = $sessionService = SessionService::getInstance();
 
 ?>
@@ -26,36 +34,31 @@ $session = $sessionService = SessionService::getInstance();
 
     <?php
     echo "<h1>{$session->getWelcomeMessage()}</h1>";
+    $config = Config::getInstance();
+    $categoriasService = new CategoriasService($config->db);
+    $categorias = $categoriasService->findAll();
 
-    // Comprobar si el usuario está logueado
-    if ($session->isLoggedIn()) {
-        echo "El usuario está logueado.";
-        echo "<br>";
-    } else {
-        echo "El usuario no está logueado.";
-        echo "<br>";
+    // Hacer algo con la lista de objetos Categoria
+    foreach ($categorias as $categoria) {
+        echo $categoria->nombre . PHP_EOL;
     }
 
-    // Comprobar si el usuario es administrador
-    if ($session->isAdmin()) {
-        echo "El usuario es administrador.";
-        echo "<br>";
-    } else {
-        echo "El usuario no es administrador.";
-        echo "<br>";
-    }
-
-    // Obtener el número de visitas
-    $visitCount = $session->getVisitCount();
-    echo "Número de visitas: " . $visitCount;
     echo "<br>";
+
+    $productosService = new ProductosService($config->db);
+    $productos = $productosService->findAllWithCategoryName();
+    // Hacer algo con la lista de objetos Producto
+    foreach ($productos as $producto) {
+        echo $producto->marca . PHP_EOL;
+    }
+
     ?>
 
     <p class="mt-4 text-center" style="font-size: smaller;">
         <span>Nº de visitas: <?php echo $session->getVisitCount(); ?></span>
         <?php
         if ($session->isLoggedIn()) {
-            echo "<span>, desde el último lgoin en: {$session->getLastLoginDate()}</span>";
+            echo "<span>, desde el último login en: {$session->getLastLoginDate()}</span>";
         }
         ?>
     </p>

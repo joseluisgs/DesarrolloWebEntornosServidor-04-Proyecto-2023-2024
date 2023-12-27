@@ -3,20 +3,20 @@
 
 use config\Config;
 use services\SessionService;
-use services\UserService;
+use services\UsersService;
 
 
 require_once 'vendor/autoload.php';
 
 require_once __DIR__ . '/services/SessionService.php';
-require_once __DIR__ . '/services/UserService.php';
+require_once __DIR__ . '/services/UsersService.php';
 require_once __DIR__ . '/config/Config.php';
 
 $session = SessionService::getInstance();
 $config = Config::getInstance();
 
 $error = '';
-$usersService = new UserService($config->db);
+$usersService = new UsersService($config->db);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validar y limpiar la entrada
