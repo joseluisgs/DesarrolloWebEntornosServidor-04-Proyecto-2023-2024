@@ -1,7 +1,6 @@
 <?php
 
 use config\Config;
-use services\CategoriasService;
 use services\ProductosService;
 use services\SessionService;
 
@@ -10,9 +9,7 @@ require_once 'vendor/autoload.php';
 
 // Para las sesiones y configuración
 require_once __DIR__ . '/services/SessionService.php';
-require_once __DIR__ . '/services/CategoriasService.php';
 require_once __DIR__ . '/config/Config.php';
-require_once __DIR__ . '/models/Categoria.php';
 require_once __DIR__ . '/services/ProductosService.php';
 require_once __DIR__ . '/models/Producto.php';
 $session = $sessionService = SessionService::getInstance();
@@ -35,24 +32,50 @@ $session = $sessionService = SessionService::getInstance();
     <?php
     echo "<h1>{$session->getWelcomeMessage()}</h1>";
     $config = Config::getInstance();
-    $categoriasService = new CategoriasService($config->db);
-    $categorias = $categoriasService->findAll();
-
-    // Hacer algo con la lista de objetos Categoria
-    foreach ($categorias as $categoria) {
-        echo $categoria->nombre . PHP_EOL;
-    }
-
-    echo "<br>";
-
-    $productosService = new ProductosService($config->db);
-    $productos = $productosService->findAllWithCategoryName();
-    // Hacer algo con la lista de objetos Producto
-    foreach ($productos as $producto) {
-        echo $producto->marca . PHP_EOL;
-    }
-
     ?>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Imagen</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        $productosService = new ProductosService($config->db);
+        $productos = $productosService->findAllWithCategoryName();
+        ?>
+        <?php foreach ($productos as $producto): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($producto->id); ?></td>
+                <td><?php echo htmlspecialchars($producto->marca); ?></td>
+                <td><?php echo htmlspecialchars($producto->modelo); ?></td>
+                <td><?php echo htmlspecialchars($producto->precio); ?></td>
+                <td><?php echo htmlspecialchars($producto->stock); ?></td>
+                <td>
+                    <img alt="Imagen del producto" height="50"
+                         src="<?php echo htmlspecialchars($producto->imagen); ?>" width="50">
+                </td>
+                <td>
+                    <a class="btn btn-primary btn-sm"
+                       href="details.php/<?php echo $producto->id; ?>">Detalles</a>
+                    <a class="btn btn-secondary btn-sm"
+                       href="update.php/<?php echo $producto->id; ?>">Editar</a>
+                    <a class="btn btn-info btn-sm"
+                       href="update-image.php/<?php echo $producto->id; ?>">Imagen</a>
+                    <a class="btn btn-danger btn-sm"
+                       href="delete.php/<?php echo $producto->id; ?>">Eliminar</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
 
     <p class="mt-4 text-center" style="font-size: smaller;">
         <span>Nº de visitas: <?php echo $session->getVisitCount(); ?></span>

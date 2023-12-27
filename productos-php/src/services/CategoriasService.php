@@ -18,7 +18,7 @@ class CategoriasService
 
     public function findAll()
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM categorias");
+        $stmt = $this->pdo->prepare("SELECT * FROM categorias ORDER BY id ASC");
         $stmt->execute();
 
         $categorias = [];

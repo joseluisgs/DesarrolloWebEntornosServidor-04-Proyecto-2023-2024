@@ -23,6 +23,7 @@ class ProductosService
             SELECT p.*, c.nombre AS categoria_nombre
             FROM productos p
             LEFT JOIN categorias c ON p.categoria_id = c.id
+            oRDER BY p.id ASC
         ");
         $stmt->execute();
 
