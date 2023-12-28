@@ -97,4 +97,14 @@ class ProductosService
 
         return $producto;
     }
+
+    public function deleteById($id)
+    {
+        $sql = "DELETE FROM productos WHERE id = :id"; // Consulta SQL para eliminar
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT); // Vincular el ID como un entero
+
+        return $stmt->execute(); // Ejecutar la consulta y devolver el resultado
+    }
 }

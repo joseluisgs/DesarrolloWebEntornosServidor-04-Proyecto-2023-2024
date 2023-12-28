@@ -4,6 +4,7 @@ namespace models;
 
 class Producto
 {
+    public static $IMAGEN_DEFAULT = 'https://via.placeholder.com/150';
     private $id;
     private $uuid;
     private $descripcion;
@@ -24,7 +25,7 @@ class Producto
         $this->id = $id;
         $this->uuid = $uuid;
         $this->descripcion = $descripcion;
-        $this->imagen = $imagen;
+        $this->imagen = $imagen ?? self::$IMAGEN_DEFAULT;
         $this->marca = $marca;
         $this->modelo = $modelo;
         $this->precio = $precio;
