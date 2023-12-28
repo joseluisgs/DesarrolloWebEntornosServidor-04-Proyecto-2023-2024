@@ -34,6 +34,15 @@ $session = $sessionService = SessionService::getInstance();
     $config = Config::getInstance();
     ?>
 
+    <form action="index.php" class="mb-3" method="get">
+        <div class="input-group">
+            <input type="text" class="form-control" id="search" name="search" placeholder="Marca o Modelo">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Buscar</button>
+            </div>
+        </div>
+    </form>
+
     <table class="table">
         <thead>
         <tr>
@@ -48,8 +57,10 @@ $session = $sessionService = SessionService::getInstance();
         </thead>
         <tbody>
         <?php
+        // Obtener el término de búsqueda si existe
+        $searchTerm = $_GET['search'] ?? null;
         $productosService = new ProductosService($config->db);
-        $productos = $productosService->findAllWithCategoryName();
+        $productos = $productosService->findAllWithCategoryName($searchTerm);
         ?>
         <?php foreach ($productos as $producto): ?>
             <tr>
@@ -64,23 +75,25 @@ $session = $sessionService = SessionService::getInstance();
                 </td>
                 <td>
                     <a class="btn btn-primary btn-sm"
-                       href="details.php/<?php echo $producto->id; ?>">Detalles</a>
+                       href="details.php?id=<?php echo $producto->id; ?>">Detalles</a>
                     <a class="btn btn-secondary btn-sm"
-                       href="update.php/<?php echo $producto->id; ?>">Editar</a>
+                       href="update.php?id=<?php echo $producto->id; ?>">Editar</a>
                     <a class="btn btn-info btn-sm"
-                       href="update-image.php/<?php echo $producto->id; ?>">Imagen</a>
+                       href="update-image.php?id=<?php echo $producto->id; ?>">Imagen</a>
                     <a class="btn btn-danger btn-sm"
-                       href="delete.php/<?php echo $producto->id; ?>">Eliminar</a>
+                       href="delete.php?id=<?php echo $producto->id; ?>">Eliminar</a>
                 </td>
             </tr>
         <?php endforeach; ?>
         </tbody>
     </table>
 
+    <a class="btn btn-success" href="create.php">Nuevo Producto</a>
+
     <p class="mt-4 text-center" style="font-size: smaller;">
-        <span>Nº de visitas: <?php echo $session->getVisitCount(); ?></span>
         <?php
         if ($session->isLoggedIn()) {
+            echo "<span>Nº de visitas: {$session->getVisitCount()}</span>";
             echo "<span>, desde el último login en: {$session->getLastLoginDate()}</span>";
         }
         ?>

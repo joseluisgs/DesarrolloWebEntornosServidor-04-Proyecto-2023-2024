@@ -17,14 +17,27 @@ class ProductosService
         $this->pdo = $pdo;
     }
 
-    public function findAllWithCategoryName()
+    public function findAllWithCategoryName($searchTerm = null)
     {
-        $stmt = $this->pdo->prepare("
-            SELECT p.*, c.nombre AS categoria_nombre
-            FROM productos p
-            LEFT JOIN categorias c ON p.categoria_id = c.id
-            oRDER BY p.id ASC
-        ");
+        $sql = "SELECT p.*, c.nombre AS categoria_nombre
+        FROM productos p
+        LEFT JOIN categorias c ON p.categoria_id = c.id";
+
+
+        if ($searchTerm) {
+            $searchTerm = '%' . strtolower($searchTerm) . '%'; // Convertir el término de búsqueda a minúsculas
+            $sql .= " WHERE LOWER(p.marca) LIKE :searchTerm OR LOWER(p.modelo) LIKE :searchTerm";
+        }
+
+        $sql .= " ORDER BY p.id ASC";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        if ($searchTerm) {
+            // Vincula el mismo término de búsqueda a los dos parámetros de búsqueda
+            $stmt->bindValue(':searchTerm', $searchTerm, PDO::PARAM_STR);
+        }
+
         $stmt->execute();
 
         $productos = [];
