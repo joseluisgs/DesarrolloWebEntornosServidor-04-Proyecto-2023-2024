@@ -51,6 +51,9 @@ if ($id === false) {
             }
         }
         $productosService->deleteById($id);
-        header('Location: index.php');
+        echo "<script type='text/javascript'>
+                alert('Producto eliminado correctamente');
+                window.location.href = 'index.php';
+                </script>";
     }
 }
