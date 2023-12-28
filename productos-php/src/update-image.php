@@ -12,7 +12,17 @@ require_once __DIR__ . '/config/Config.php';
 require_once __DIR__ . '/services/ProductosService.php';
 require_once __DIR__ . '/models/Producto.php';
 
-$session = $sessionService = SessionService::getInstance();
+// Solo se puede modificar si en la sesión el usuario es admin
+$session = SessionService::getInstance();
+if (!$session->isAdmin()) {
+    // No enviar ninguna salida antes de este bloque de código
+    echo "<script type='text/javascript'>
+            alert('No tienes permisos para modificar un producto');
+            window.location.href = 'index.php';
+          </script>";
+    exit;
+}
+
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $producto = null;
