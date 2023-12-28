@@ -9,7 +9,7 @@ use PDO;
 
 require_once __DIR__ . '/../models/User.php';
 
-class UserService
+class UsersService
 {
     private $db;
 

@@ -1,5 +1,7 @@
 <?php
 
+use config\Config;
+use services\ProductosService;
 use services\SessionService;
 
 // Para cargar las clases automáticamente
@@ -7,6 +9,9 @@ require_once 'vendor/autoload.php';
 
 // Para las sesiones y configuración
 require_once __DIR__ . '/services/SessionService.php';
+require_once __DIR__ . '/config/Config.php';
+require_once __DIR__ . '/services/ProductosService.php';
+require_once __DIR__ . '/models/Producto.php';
 $session = $sessionService = SessionService::getInstance();
 
 ?>
@@ -26,36 +31,70 @@ $session = $sessionService = SessionService::getInstance();
 
     <?php
     echo "<h1>{$session->getWelcomeMessage()}</h1>";
-
-    // Comprobar si el usuario está logueado
-    if ($session->isLoggedIn()) {
-        echo "El usuario está logueado.";
-        echo "<br>";
-    } else {
-        echo "El usuario no está logueado.";
-        echo "<br>";
-    }
-
-    // Comprobar si el usuario es administrador
-    if ($session->isAdmin()) {
-        echo "El usuario es administrador.";
-        echo "<br>";
-    } else {
-        echo "El usuario no es administrador.";
-        echo "<br>";
-    }
-
-    // Obtener el número de visitas
-    $visitCount = $session->getVisitCount();
-    echo "Número de visitas: " . $visitCount;
-    echo "<br>";
+    $config = Config::getInstance();
     ?>
 
+    <form action="index.php" class="mb-3" method="get">
+        <div class="input-group">
+            <input type="text" class="form-control" id="search" name="search" placeholder="Marca o Modelo">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Buscar</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Imagen</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        // Obtener el término de búsqueda si existe
+        $searchTerm = $_GET['search'] ?? null;
+        $productosService = new ProductosService($config->db);
+        $productos = $productosService->findAllWithCategoryName($searchTerm);
+        ?>
+        <?php foreach ($productos as $producto): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($producto->id); ?></td>
+                <td><?php echo htmlspecialchars($producto->marca); ?></td>
+                <td><?php echo htmlspecialchars($producto->modelo); ?></td>
+                <td><?php echo htmlspecialchars($producto->precio); ?></td>
+                <td><?php echo htmlspecialchars($producto->stock); ?></td>
+                <td>
+                    <img alt="Imagen del producto" height="50"
+                         src="<?php echo htmlspecialchars($producto->imagen); ?>" width="50">
+                </td>
+                <td>
+                    <a class="btn btn-primary btn-sm"
+                       href="details.php?id=<?php echo $producto->id; ?>">Detalles</a>
+                    <a class="btn btn-secondary btn-sm"
+                       href="update.php?id=<?php echo $producto->id; ?>">Editar</a>
+                    <a class="btn btn-info btn-sm"
+                       href="update-image.php?id=<?php echo $producto->id; ?>">Imagen</a>
+                    <a class="btn btn-danger btn-sm"
+                       href="delete.php?id=<?php echo $producto->id; ?>">Eliminar</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <a class="btn btn-success" href="create.php">Nuevo Producto</a>
+
     <p class="mt-4 text-center" style="font-size: smaller;">
-        <span>Nº de visitas: <?php echo $session->getVisitCount(); ?></span>
         <?php
         if ($session->isLoggedIn()) {
-            echo "<span>, desde el último lgoin en: {$session->getLastLoginDate()}</span>";
+            echo "<span>Nº de visitas: {$session->getVisitCount()}</span>";
+            echo "<span>, desde el último login en: {$session->getLastLoginDate()}</span>";
         }
         ?>
     </p>
