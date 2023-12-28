@@ -107,4 +107,33 @@ class ProductosService
 
         return $stmt->execute(); // Ejecutar la consulta y devolver el resultado
     }
+
+    public function update(Producto $producto)
+    {
+        $sql = "UPDATE productos SET
+            descripcion = :descripcion,
+            imagen = :imagen,
+            marca = :marca,
+            modelo = :modelo,
+            precio = :precio,
+            stock = :stock,
+            categoria_id = :categoria_id,
+            updated_at = :updated_at
+            WHERE id = :id";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->bindValue(':descripcion', $producto->descripcion, PDO::PARAM_STR);
+        $stmt->bindValue(':imagen', $producto->imagen, PDO::PARAM_STR);
+        $stmt->bindValue(':marca', $producto->marca, PDO::PARAM_STR);
+        $stmt->bindValue(':modelo', $producto->modelo, PDO::PARAM_STR);
+        $stmt->bindValue(':precio', $producto->precio, PDO::PARAM_STR);
+        $stmt->bindValue(':stock', $producto->stock, PDO::PARAM_INT);
+        $stmt->bindValue(':categoria_id', $producto->categoriaId, PDO::PARAM_INT);
+        $producto->updatedAt = date('Y-m-d H:i:s');
+        $stmt->bindValue(':updated_at', $producto->updatedAt, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $producto->id, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
 }
