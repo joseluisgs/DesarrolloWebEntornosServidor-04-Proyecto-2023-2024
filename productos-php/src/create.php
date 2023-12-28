@@ -90,8 +90,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Guardamos el producto
         try {
             $productosService->save($producto);
-            header('Location: index.php');
-            exit;
+            echo "<script type='text/javascript'>
+                alert('Producto creado correctamente');
+                window.location.href = 'index.php';
+                </script>";
         } catch (Exception $e) {
             $error = 'Error en el sistema. Por favor intente más tarde.';
         }
@@ -104,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Crear Producto Producto</title>
+    <title>Crear Producto</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
           integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link href="/images/favicon.png" rel="icon" type="image/png">
@@ -113,12 +115,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="container">
     <?php require_once 'header.php'; ?>
     <h1>Crear Producto</h1>
-
-    <?php if (isset($error)): ?>
-        <div class="alert alert-danger" role="alert">
-            <?php echo $error; ?>
-        </div>
-    <?php endif; ?>
 
     <form action="create.php" method="post">
         <div class="form-group">

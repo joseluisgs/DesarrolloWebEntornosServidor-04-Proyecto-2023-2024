@@ -37,8 +37,10 @@ if ($id === false) {
     $productosService = new ProductosService($config->db);
     $producto = $productosService->findById($id);
     if ($producto === null) {
-        header('Location: index.php');
-        exit;
+        echo "<script type='text/javascript'>
+                alert('No existe el producto');
+                window.location.href = 'index.php';
+                </script>";
     }
 }
 ?>
