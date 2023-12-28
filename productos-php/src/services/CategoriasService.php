@@ -34,4 +34,23 @@ class CategoriasService
         }
         return $categorias;
     }
+
+    public function findByName($name)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM categorias WHERE nombre = :nombre");
+        $stmt->execute(['nombre' => $name]);
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row) {
+            return false;
+        }
+        $categoria = new Categoria(
+            $row['id'],
+            $row['nombre'],
+            $row['created_at'],
+            $row['updated_at'],
+            $row['is_deleted']
+        );
+        return $categoria;
+    }
 }
