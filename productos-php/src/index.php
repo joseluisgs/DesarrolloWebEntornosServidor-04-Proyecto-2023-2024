@@ -81,7 +81,10 @@ $session = $sessionService = SessionService::getInstance();
                     <a class="btn btn-info btn-sm"
                        href="update-image.php?id=<?php echo $producto->id; ?>">Imagen</a>
                     <a class="btn btn-danger btn-sm"
-                       href="delete.php?id=<?php echo $producto->id; ?>">Eliminar</a>
+                       href="delete.php?id=<?php echo $producto->id; ?>"
+                       onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
+                        Eliminar
+                    </a>
                 </td>
             </tr>
         <?php endforeach; ?>

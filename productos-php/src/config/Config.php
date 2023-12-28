@@ -19,6 +19,7 @@ class Config
 
     private $rootPath = '/var/www/html/public/';
     private $uploadPath = '/var/www/html/public/uploads/';
+    private $uploadUrl = 'http://localhost:8080/uploads/';
 
     private function __construct()
     {
