@@ -4,6 +4,7 @@ namespace services;
 
 use models\Producto;
 use PDO;
+use Ramsey\Uuid\Uuid;
 
 
 require_once __DIR__ . '/../models/Producto.php';
@@ -133,6 +134,31 @@ class ProductosService
         $producto->updatedAt = date('Y-m-d H:i:s');
         $stmt->bindValue(':updated_at', $producto->updatedAt, PDO::PARAM_STR);
         $stmt->bindValue(':id', $producto->id, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
+
+    public function save(Producto $producto)
+    {
+        $sql = "INSERT INTO productos (uuid, descripcion, imagen, marca, modelo, precio, stock, categoria_id, created_at, updated_at)
+            VALUES (:uuid, :descripcion, :imagen, :marca, :modelo, :precio, :stock, :categoria_id, :created_at, :updated_at)";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $producto->uuid = Uuid::uuid4()->toString(); //uniqid(); // Generar un ID único
+        $stmt->bindValue(':uuid', $producto->uuid, PDO::PARAM_STR);
+        $stmt->bindValue(':descripcion', $producto->descripcion, PDO::PARAM_STR);
+        $producto->imagen = Producto::$IMAGEN_DEFAULT;
+        $stmt->bindValue(':imagen', $producto->imagen, PDO::PARAM_STR);
+        $stmt->bindValue(':marca', $producto->marca, PDO::PARAM_STR);
+        $stmt->bindValue(':modelo', $producto->modelo, PDO::PARAM_STR);
+        $stmt->bindValue(':precio', $producto->precio, PDO::PARAM_STR);
+        $stmt->bindValue(':stock', $producto->stock, PDO::PARAM_INT);
+        $stmt->bindValue(':categoria_id', $producto->categoriaId, PDO::PARAM_INT);
+        $producto->createdAt = date('Y-m-d H:i:s');
+        $stmt->bindValue(':created_at', $producto->createdAt, PDO::PARAM_STR);
+        $producto->updatedAt = date('Y-m-d H:i:s');
+        $stmt->bindValue(':updated_at', $producto->updatedAt, PDO::PARAM_STR);
 
         return $stmt->execute();
     }
