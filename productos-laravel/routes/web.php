@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+    return redirect()->route('productos.index');
 });
 
 // Con el método resource() se crean todas las rutas necesarias para un CRUD y se le asociará el controlador ProductoController
