@@ -12,7 +12,7 @@ class ProductoController extends Controller
     public function index(Request $request)
     {
         // Añadiendole el scope
-        $productos = Producto::search($request->name)->orderBy('id', 'asc')->paginate(4);
+        $productos = Producto::search($request->search)->orderBy('id', 'asc')->paginate(4);
         // Devolvemos la vista con los productos
         return view('productos.index')->with('productos', $productos);
     }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Producto extends Model
 {
+    public static string $IMAGE_DEFAULT = 'https://via.placeholder.com/150';
     protected $table = 'productos';
     /**
      * Estos se pueden asignar en masa con el método create() o update().
@@ -48,9 +49,9 @@ class Producto extends Model
         return $query->where('modelo', 'LIKE', "%$name%")->orWhere('marca', 'LIKE', "%$name%");
     }*/
 
-    public function scopeSearch($query, $name)
+    public function scopeSearch($query, $search)
     {
-        return $query->whereRaw('LOWER(modelo) LIKE ?', ["%" . strtolower($name) . "%"])
-            ->orWhereRaw('LOWER(marca) LIKE ?', ["%" . strtolower($name) . "%"]);
+        return $query->whereRaw('LOWER(modelo) LIKE ?', ["%" . strtolower($search) . "%"])
+            ->orWhereRaw('LOWER(marca) LIKE ?', ["%" . strtolower($search) . "%"]);
     }
 }
