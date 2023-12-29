@@ -79,6 +79,11 @@ CREATE TABLE "public"."usuarios"
     CONSTRAINT "usuarios_username_key" UNIQUE ("username")
 ) WITH (oids = false);
 
+-- Contraseña: admin Admin1
+-- Contraseña: user User1234
+-- Contraseña: test test1234
+
+
 INSERT INTO "usuarios" ("is_deleted", "created_at", "id", "updated_at", "apellidos", "email", "nombre", "password",
                         "username")
 VALUES ('f', '2023-11-02 11:43:24.724871', 1, '2023-11-02 11:43:24.724871', 'Admin Admin', 'admin@prueba.net', 'Admin',
