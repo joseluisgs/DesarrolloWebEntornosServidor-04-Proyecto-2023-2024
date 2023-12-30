@@ -62,15 +62,7 @@ class ProductoController extends Controller
         // Buscamos el producto por su id
         $producto = Producto::find($id);
         // Devolvemos el producto
-        return $producto->toJson();
-    }
-
-    public function editImage($id)
-    {
-        // Buscamos el producto por su id
-        $producto = Producto::find($id);
-        // Devolvemos el producto
-        return $producto->toJson();
+        return view('productos.edit')->with('producto', $producto);
     }
 
     public function update(Request $request, $id)
@@ -89,23 +81,26 @@ class ProductoController extends Controller
             $producto = Producto::find($id);
             // Actualizamos el producto
             $producto->update($request->all());
-            /*$producto->marca = $request->marca;
-            $producto->modelo = $request->modelo;
-            $producto->descripcion = $request->descripcion;
-            $producto->precio = $request->precio;
-            $producto->stock = $request->stock;
-            $producto->categoria = $request->categoria;*/
-
+            
             // salvamos el producto
             $producto->save();
             // Devolvemos el producto actualizado
             flash('Producto ' . $producto->modelo . '  actualizado con éxito.')->warning()->important();
-            return $producto->toJson();
+            return redirect()->route('productos.index'); // Volvemos a la vista de productos
         } catch (Exception $e) {
             flash('Error al actualizar el Producto' . $e->getMessage())->error()->important();
             return redirect()->back(); // volvemos a la anterior
         }
     }
+
+    public function editImage($id)
+    {
+        // Buscamos el producto por su id
+        $producto = Producto::find($id);
+        // Devolvemos el producto
+        return $producto->toJson();
+    }
+
 
     public function updateImage(Request $request, $id)
     {
