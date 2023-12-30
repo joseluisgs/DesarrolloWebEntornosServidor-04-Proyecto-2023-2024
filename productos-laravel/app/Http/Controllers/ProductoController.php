@@ -52,7 +52,7 @@ class ProductoController extends Controller
         // Buscamos el producto por su id
         $producto = Producto::find($id);
         // Devolvemos el producto
-        return $producto->toJson();
+        return view('productos.show')->with('producto', $producto);
     }
 
     public function edit($id)
