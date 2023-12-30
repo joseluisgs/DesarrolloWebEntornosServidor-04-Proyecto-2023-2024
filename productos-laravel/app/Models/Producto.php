@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Producto extends Model
 {
@@ -48,6 +49,17 @@ class Producto extends Model
         // pasamos el nombre del producto y buscamos en la base de datos pero lo hacemos todo en minusculas
         return $query->where('modelo', 'LIKE', "%$name%")->orWhere('marca', 'LIKE', "%$name%");
     }*/
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($producto) {
+            $producto->uuid = Str::uuid();
+        });
+    }
+
+    // Para solucionar el problema del uuid
 
     public function scopeSearch($query, $search)
     {

@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 return new class extends Migration {
     /**
@@ -13,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique()->default(Str::uuid());
+            $table->uuid('uuid')->unique();
             $table->string('marca');
             $table->string('modelo');
             $table->string('descripcion');

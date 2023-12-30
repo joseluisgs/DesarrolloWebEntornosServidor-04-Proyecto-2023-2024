@@ -35,7 +35,7 @@ class ProductoController extends Controller
             $producto->save();
             // Devolvemos el producto creado
             flash('Producto ' . $producto->modelo . '  creado con éxito.')->success()->important();
-            return $producto->toJson();
+            return redirect()->route('productos.index'); // Volvemos a la vista de productos
         } catch (Exception $e) {
             flash('Error al crear el Producto' . $e->getMessage())->error()->important();
             return redirect()->back(); // volvemos a la anterior
@@ -44,7 +44,7 @@ class ProductoController extends Controller
 
     public function create()
     {
-        return "create";
+        return view('productos.create');
     }
 
     public function show($id)
