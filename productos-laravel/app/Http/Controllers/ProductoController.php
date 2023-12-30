@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Producto;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 
 class ProductoController extends Controller
@@ -15,6 +16,19 @@ class ProductoController extends Controller
         $productos = Producto::search($request->search)->orderBy('id', 'asc')->paginate(4);
         // Devolvemos la vista con los productos
         return view('productos.index')->with('productos', $productos);
+    }
+
+    public function show($id)
+    {
+        // Buscamos el producto por su id
+        $producto = Producto::find($id);
+        // Devolvemos el producto
+        return view('productos.show')->with('producto', $producto);
+    }
+
+    public function create()
+    {
+        return view('productos.create');
     }
 
     public function store(Request $request)
@@ -42,18 +56,6 @@ class ProductoController extends Controller
         }
     }
 
-    public function create()
-    {
-        return view('productos.create');
-    }
-
-    public function show($id)
-    {
-        // Buscamos el producto por su id
-        $producto = Producto::find($id);
-        // Devolvemos el producto
-        return view('productos.show')->with('producto', $producto);
-    }
 
     public function edit($id)
     {
@@ -116,13 +118,16 @@ class ProductoController extends Controller
         try {
             // Buscamos el producto por su id
             $producto = Producto::find($id);
-            // Actualizamos el producto
-            $producto->isDeleted = true;
+            // Aquí hay que hacer lo de la imagen
+            if ($producto->imagen != Producto::$IMAGE_DEFAULT && Storage::exists($producto->imagen)) {
+                // Eliminamos la imagen
+                Storage::delete($producto->imagen);
+            }
             // salvamos el producto
             $producto->delete();
             // Devolvemos el producto actualizado
             flash('Producto ' . $producto->modelo . '  eliminado con éxito.')->error()->important();
-            return $producto->toJson();
+            return redirect()->route('productos.index'); // Volvemos a la vista de productos
         } catch (Exception $e) {
             flash('Error al eliminar el Producto' . $e->getMessage())->error()->important();
             return redirect()->back(); // volvemos a la anterior

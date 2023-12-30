@@ -55,11 +55,18 @@
                         @endif
                     </td>
                     <td>
-                        <a class="btn btn-primary btn-sm" href="{{ url('productos', ['id' => $producto->id]) }}">Detalles</a>
+                        <a class="btn btn-primary btn-sm"
+                           href="{{ route('productos.show', $producto->id) }}">Detalles</a>
                         <a class="btn btn-secondary btn-sm" href="{{ url('edit', ['id' => $producto->id]) }}">Editar</a>
                         <a class="btn btn-info  btn-sm" href="{{ url('image', ['id' => $producto->id]) }}">Imagen</a>
-                        <a class="btn btn-danger btn-sm" href="{{ url('delete', ['id' => $producto->id]) }}"
-                           onclick="return confirm('¿Estás seguro de que deseas borrar este producto?')">Borrar</a>
+                        <form action="{{ route('productos.destroy', $producto->id) }}" method="POST"
+                              style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Estás seguro de que deseas borrar este producto?')">Borrar
+                            </button>
+                        </form>
                     </td>
                 </tr>
             @endforeach
