@@ -20,7 +20,9 @@
     @include('header')
 
     {{-- Para los mensajes de errores que queramos gererar --}}
-    @include('flash::message')
+    <div class="mx-2 my-2">
+        @include('flash::message')
+    </div>
 
     {{-- Esto es el contenido --}}
     @yield('content')
