@@ -57,8 +57,10 @@
                     <td>
                         <a class="btn btn-primary btn-sm"
                            href="{{ route('productos.show', $producto->id) }}">Detalles</a>
-                        <a class="btn btn-secondary btn-sm" href="{{ url('edit', ['id' => $producto->id]) }}">Editar</a>
-                        <a class="btn btn-info  btn-sm" href="{{ url('image', ['id' => $producto->id]) }}">Imagen</a>
+                        <a class="btn btn-secondary btn-sm"
+                           href="{{ route('productos.edit', $producto->id) }}">Editar</a>
+                        <a class="btn btn-info  btn-sm"
+                           href="{{ route('productos.editImage', $producto->id) }}">Imagen</a>
                         <form action="{{ route('productos.destroy', $producto->id) }}" method="POST"
                               style="display: inline;">
                             @csrf

@@ -31,6 +31,80 @@ class ProductoController extends Controller
         return view('productos.create');
     }
 
+    public function edit($id)
+    {
+        // Buscamos el producto por su id
+        $producto = Producto::find($id);
+        // Devolvemos el producto
+        return view('productos.edit')->with('producto', $producto);
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validación de datos
+        $request->validate([
+            'marca' => 'min:4|max:120|required',
+            'modelo' => 'min:4|max:120|required',
+            'descripcion' => 'min:1|max:200|required',
+            'precio' => 'required|regex:/^\d{1,13}(\.\d{1,2})?$/',
+            'stock' => 'required|integer',
+            'categoria' => 'required|in:COMIDA,DEPORTES,OCIO,BEBIDA,OTRO',
+        ]);
+        try {
+            // Buscamos el producto por su id
+            $producto = Producto::find($id);
+            // Actualizamos el producto
+            $producto->update($request->all());
+
+            // salvamos el producto
+            $producto->save();
+            // Devolvemos el producto actualizado
+            flash('Producto ' . $producto->modelo . '  actualizado con éxito.')->warning()->important();
+            return redirect()->route('productos.index'); // Volvemos a la vista de productos
+        } catch (Exception $e) {
+            flash('Error al actualizar el Producto' . $e->getMessage())->error()->important();
+            return redirect()->back(); // volvemos a la anterior
+        }
+    }
+
+    public function editImage($id)
+    {
+        // Buscamos el producto por su id
+        $producto = Producto::find($id);
+        // Devolvemos el producto
+        return view('productos.image')->with('producto', $producto);
+    }
+
+    public function updateImage(Request $request, $id)
+    {
+        // Validación de datos
+        $request->validate([
+            'imagen' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        try {
+            // Buscamos el producto por su id
+            $producto = Producto::find($id);
+            // Aquí hay que hacer lo de la imagen
+            if ($producto->imagen != Producto::$IMAGE_DEFAULT && Storage::exists($producto->imagen)) {
+                // Eliminamos la imagen
+                Storage::delete($producto->imagen);
+            }
+            // Guardamos la imagen
+            $imagen = $request->file('imagen');
+            $extension = $imagen->getClientOriginalExtension();
+            $fileToSave = $producto->uuid . '.' . $extension;
+            $producto->imagen = $imagen->storeAs('productos', $fileToSave, 'public'); // Guardamos la imagen en el disco storage/app/public/products
+            // salvamos el producto
+            $producto->save();
+            // Devolvemos el producto actualizado
+            flash('Producto ' . $producto->modelo . '  actualizado con éxito.')->warning()->important();
+            return redirect()->route('productos.index'); // Volvemos a la vista de productos
+        } catch (Exception $e) {
+            flash('Error al actualizar el Producto' . $e->getMessage())->error()->important();
+            return redirect()->back(); // volvemos a la anterior
+        }
+    }
+
     public function store(Request $request)
     {
         // Validación de datos
@@ -55,63 +129,6 @@ class ProductoController extends Controller
             return redirect()->back(); // volvemos a la anterior
         }
     }
-
-
-    public function edit($id)
-    {
-        // Buscamos el producto por su id
-        $producto = Producto::find($id);
-        // Devolvemos el producto
-        return $producto->toJson();
-    }
-
-    public function editImage($id)
-    {
-        // Buscamos el producto por su id
-        $producto = Producto::find($id);
-        // Devolvemos el producto
-        return $producto->toJson();
-    }
-
-    public function update(Request $request, $id)
-    {
-        // Validación de datos
-        $request->validate([
-            'marca' => 'min:4|max:120|required',
-            'modelo' => 'min:4|max:120|required',
-            'descripcion' => 'min:1|max:200|required',
-            'precio' => 'required|regex:/^\d{1,13}(\.\d{1,2})?$/',
-            'stock' => 'required|integer',
-            'categoria' => 'required|in:COMIDA,DEPORTES,OCIO,BEBIDA,OTRO',
-        ]);
-        try {
-            // Buscamos el producto por su id
-            $producto = Producto::find($id);
-            // Actualizamos el producto
-            $producto->update($request->all());
-            /*$producto->marca = $request->marca;
-            $producto->modelo = $request->modelo;
-            $producto->descripcion = $request->descripcion;
-            $producto->precio = $request->precio;
-            $producto->stock = $request->stock;
-            $producto->categoria = $request->categoria;*/
-
-            // salvamos el producto
-            $producto->save();
-            // Devolvemos el producto actualizado
-            flash('Producto ' . $producto->modelo . '  actualizado con éxito.')->warning()->important();
-            return $producto->toJson();
-        } catch (Exception $e) {
-            flash('Error al actualizar el Producto' . $e->getMessage())->error()->important();
-            return redirect()->back(); // volvemos a la anterior
-        }
-    }
-
-    public function updateImage(Request $request, $id)
-    {
-        return "updateImage";
-    }
-
 
     public function destroy($id)
     {
