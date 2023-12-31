@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use App\Models\Producto;
 use Exception;
 use Illuminate\Http\Request;
@@ -28,15 +29,47 @@ class ProductoController extends Controller
 
     public function create()
     {
-        return view('productos.create');
+        $categorias = Categoria::all();
+        return view('productos.create')->with('categorias', $categorias);
+    }
+
+    public function store(Request $request)
+    {
+        // Validación de datos
+        $request->validate([
+            'marca' => 'min:4|max:120|required',
+            'modelo' => 'min:4|max:120|required',
+            'descripcion' => 'min:1|max:200|required',
+            'precio' => 'required|regex:/^\d{1,13}(\.\d{1,2})?$/',
+            'stock' => 'required|integer',
+            'categoria' => 'required|exists:categorias,id', // Asegúrate de que la columna 'id' sea la correcta en value del formulario (autovalida que exista en la tabla categorias)
+        ]);
+        try {
+            // Creamos el producto
+            $producto = new Producto($request->all());
+            // Asignamos la categoría
+            $producto->categoria_id = $request->categoria;
+            // salvamos el producto
+            $producto->save();
+            // Devolvemos el producto creado
+            flash('Producto ' . $producto->modelo . '  creado con éxito.')->success()->important();
+            return redirect()->route('productos.index'); // Volvemos a la vista de productos
+        } catch (Exception $e) {
+            flash('Error al crear el Producto' . $e->getMessage())->error()->important();
+            return redirect()->back(); // volvemos a la anterior
+        }
     }
 
     public function edit($id)
     {
         // Buscamos el producto por su id
         $producto = Producto::find($id);
+        // Buscamos las categorias
+        $categorias = Categoria::all();
         // Devolvemos el producto
-        return view('productos.edit')->with('producto', $producto);
+        return view('productos.edit')
+            ->with('producto', $producto)
+            ->with('categorias', $categorias);
     }
 
     public function update(Request $request, $id)
@@ -48,14 +81,15 @@ class ProductoController extends Controller
             'descripcion' => 'min:1|max:200|required',
             'precio' => 'required|regex:/^\d{1,13}(\.\d{1,2})?$/',
             'stock' => 'required|integer',
-            'categoria' => 'required|in:COMIDA,DEPORTES,OCIO,BEBIDA,OTRO',
+            'categoria' => 'required|exists:categorias,id',
         ]);
         try {
             // Buscamos el producto por su id
             $producto = Producto::find($id);
             // Actualizamos el producto
             $producto->update($request->all());
-
+            // Asignamos la categoría
+            $producto->categoria_id = $request->categoria;
             // salvamos el producto
             $producto->save();
             // Devolvemos el producto actualizado
@@ -105,30 +139,6 @@ class ProductoController extends Controller
         }
     }
 
-    public function store(Request $request)
-    {
-        // Validación de datos
-        $request->validate([
-            'marca' => 'min:4|max:120|required',
-            'modelo' => 'min:4|max:120|required',
-            'descripcion' => 'min:1|max:200|required',
-            'precio' => 'required|regex:/^\d{1,13}(\.\d{1,2})?$/',
-            'stock' => 'required|integer',
-            'categoria' => 'required|in:COMIDA,DEPORTES,OCIO,BEBIDA,OTRO',
-        ]);
-        try {
-            // Creamos el producto
-            $producto = new Producto($request->all());
-            // salvamos el producto
-            $producto->save();
-            // Devolvemos el producto creado
-            flash('Producto ' . $producto->modelo . '  creado con éxito.')->success()->important();
-            return redirect()->route('productos.index'); // Volvemos a la vista de productos
-        } catch (Exception $e) {
-            flash('Error al crear el Producto' . $e->getMessage())->error()->important();
-            return redirect()->back(); // volvemos a la anterior
-        }
-    }
 
     public function destroy($id)
     {
