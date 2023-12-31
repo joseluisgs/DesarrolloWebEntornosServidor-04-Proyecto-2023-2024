@@ -20,8 +20,8 @@ Podrás seguir sus pasos commit a commit o en las ramas indicadas por clase.
 
 # Problema
 
-- Crear una web de gestión de Productos (CRUD) en PHP con seguridad (autenticarse) para poder crear, modificar o eliminar un producto.
-- Crear una web de gestion de productos (CRUD) en Laravel con seguridad (autenticarse) para poder crear, modificar o eliminar un producto.
+- Crear una web de gestión de Productos (CRUD) en PHP con seguridad (autenticarse) para poder crear, modificar o eliminar un producto. Se debe tener en cuenta que algunas de esas operaciones serán basadas en un rol (autorización).
+- Crear una web de gestion de productos (CRUD) en Laravel con seguridad (autenticarse) para poder crear, modificar o eliminar un producto. Se debe en cuenta que algunas de esas operaciones serán basadas en un rol (autorización).
 
 # Autor
 
