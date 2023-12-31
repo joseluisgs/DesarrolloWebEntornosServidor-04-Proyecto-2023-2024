@@ -24,3 +24,7 @@ Route::resource('productos', ProductoController::class);
 // creamos uno especial para la imagen
 Route::get('productos/{id}/edit-image', [ProductoController::class, 'editImage'])->name('productos.editImage');
 Route::patch('productos/{id}/edit-image', [ProductoController::class, 'updateImage'])->name('productos.updateImage');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
