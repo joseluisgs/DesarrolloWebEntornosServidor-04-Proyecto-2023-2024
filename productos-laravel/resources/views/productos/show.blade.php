@@ -13,15 +13,15 @@
     <h1>Detalles del Producto</h1>
     <dl class="row">
         <dt class="col-sm-2">ID:</dt>
-        <dd class="col-sm-10"><?php echo htmlspecialchars($producto->id); ?></dd>
+        <dd class="col-sm-10">{{ $producto->id }}</dd>
         <dt class="col-sm-2">Marca:</dt>
-        <dd class="col-sm-10"><?php echo htmlspecialchars($producto->marca); ?></dd>
+        <dd class="col-sm-10">{{ $producto->marca }}</dd>
         <dt class="col-sm-2">Modelo:</dt>
-        <dd class="col-sm-10"><?php echo htmlspecialchars($producto->modelo); ?></dd>
+        <dd class="col-sm-10">{{ $producto->modelo }}</dd>
         <dt class="col-sm-2">Descripción:</dt>
-        <dd class="col-sm-10"><?php echo htmlspecialchars($producto->descripcion); ?></dd>
+        <dd class="col-sm-10">{{ $producto->descripcion }}</dd>
         <dt class="col-sm-2">Precio:</dt>
-        <dd class="col-sm-10"><?php echo htmlspecialchars($producto->precio); ?></dd>
+        <dd class="col-sm-10">{{ $producto->precio }}</dd>
         <dt class="col-sm-2">Imagen:</dt>
         <dd class="col-sm-10">
             @if($producto->imagen != Producto::$IMAGE_DEFAULT)
@@ -31,9 +31,9 @@
             @endif
         </dd>
         <dt class="col-sm-2">Stock:</dt>
-        <dd class="col-sm-10"><?php echo htmlspecialchars($producto->stock); ?></dd>
+        <dd class="col-sm-10">{{ $producto->stock }}</dd>
         <dt class="col-sm-2">Categoría:</dt>
-        <dd class="col-sm-10"><?php echo htmlspecialchars($producto->categoriaNombre); ?></dd>
+        <dd class="col-sm-10">{{ $producto->categoria->nombre }}</dd>
     </dl>
 
 

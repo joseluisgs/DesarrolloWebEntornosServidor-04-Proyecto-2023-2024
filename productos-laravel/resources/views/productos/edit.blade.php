@@ -25,7 +25,6 @@
     <form action="{{ route("productos.update", $producto->id) }}" method="post">
         @csrf
         @method('PUT')
-        <input type="hidden" name="id" value="{{$producto->id}}">
         <div class="form-group">
             <label for="marca">Marca:</label>
             <input class="form-control" id="marca" name="marca" type="text" required value="{{$producto->marca}}">
@@ -53,11 +52,10 @@
             <label for="categoria">Categoría:</label>
             <select class="form-control" id="categoria" name="categoria" required>
                 <option>Seleccione una categoría</option>
-                <option @if($producto->categoria == 'COMIDA') selected @endif>COMIDA</option>
-                <option @if($producto->categoria == 'BEBIDA') selected @endif>BEBIDA</option>
-                <option @if($producto->categoria == 'OCIO') selected @endif>OCIO</option>
-                <option @if($producto->categoria == 'DEPORTES') selected @endif>DEPORTES</option>
-                <option @if($producto->categoria == 'OTRO') selected @endif>OTRO</option>
+                @foreach($categorias as $categoria)
+                    <option @if($producto->categoria->id == $categoria->id) selected
+                            @endif value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
+                @endforeach
             </select>
         </div>
 

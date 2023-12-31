@@ -49,11 +49,9 @@
             <label for="categoria">Categoría:</label>
             <select class="form-control" id="categoria" name="categoria" required>
                 <option>Seleccione una categoría</option>
-                <option>COMIDA</option>
-                <option>BEBIDA</option>
-                <option>OCIO</option>
-                <option>DEPORTES</option>
-                <option>OTRO</option>
+                @foreach($categorias as $categoria)
+                    <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
+                @endforeach
             </select>
         </div>
 
