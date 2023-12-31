@@ -21,7 +21,7 @@ class Producto extends Model
         'imagen',
         'precio',
         'stock',
-        'categoria',
+        'categoria_id',
         'isDeleted',
     ];
 
@@ -65,5 +65,11 @@ class Producto extends Model
     {
         return $query->whereRaw('LOWER(modelo) LIKE ?', ["%" . strtolower($search) . "%"])
             ->orWhereRaw('LOWER(marca) LIKE ?', ["%" . strtolower($search) . "%"]);
+    }
+
+    // Relación de producto con categoría:
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class);
     }
 }
