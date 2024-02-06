@@ -13,8 +13,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Login
-                    </a>
+                    @if (Route::has('login'))
+                        @auth
+                            <a href="{{ route ('home')  }}" class="nav-link">Home</a>
+                        @else
+                            <a href="{{ route('login') }}" class="nav-link">Login</a>
+                        @endauth
+                    @endif
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('productos.index') }}">Productos</a>
@@ -27,7 +32,7 @@
             <ul class="navbar-nav ml-auto"> <!-- Agregamos esta línea -->
                 <li class="nav-item">
                     <span class="navbar-text">
-                        {{ auth()->user()->name ?? 'invitado/a' }}
+                        {{ auth()->user()->role ?? 'invitado/a' }}
                     </span>
                 </li>
             </ul>
