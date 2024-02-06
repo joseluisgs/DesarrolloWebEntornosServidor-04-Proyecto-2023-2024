@@ -23,7 +23,6 @@ if (!$session->isAdmin()) {
     exit;
 }
 
-
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $producto = null;
 
